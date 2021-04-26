@@ -9,6 +9,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -17,12 +18,14 @@ jobs:
     # dotnet build and publish
     - name: Build with dotnet
       run: dotnet build --configuration Release
+      
     - name: dotnet publish
       run: |
         dotnet publish -c Release -o dotnetcorewebapp 
+        
     - name: 'Run Azure webapp deploy action using publish profile credentials'
       uses: azure/webapps-deploy@v1
       with: 
         app-name: beapropertymanagement # Replace with your app name
-        publish-profile: $ # Define secret variable in repository settings as per action documentation
+        publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
         package: './dotnetcorewebapp'
